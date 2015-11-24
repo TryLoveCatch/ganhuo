@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".PhotoActivity">
+
+    <include layout="@layout/include_toolbar" />
+
+    <!--<FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />-->
+    <RelativeLayout
+        android:id="@+id/photo_rlt_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <io.gank.tlc.share.view.pinchImageView.PinchImageViewPager
+            android:id="@+id/photo_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:transitionName="@string/transition_share_photo"
+            />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/photo_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/dp_16"
+            android:src="@android:drawable/ic_dialog_email"
+            />
+    </RelativeLayout>
+
+    <io.gank.tlc.share.view.EmptyView
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+</android.support.design.widget.CoordinatorLayout>

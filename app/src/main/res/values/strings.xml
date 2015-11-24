@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">GanHuo</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="title_exit">提示</string>
+    <string name="msg_exit">您确定要退出应用么？</string>
+
+    <string name="transition_share_photo">transition:PHOTO</string>
+
+    <!-- google admob广告id -->
+    <string name="banner_ad_google_id">ca-app-pub-3940256099942544/6300978111</string>
+    <!-- facebook audience network 广告id -->
+    <string name="banner_ad_facebook_id">1053431274680044_1053434978013007</string>
+</resources>
