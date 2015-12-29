@@ -44,6 +44,18 @@
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
+            android:name=".share.fragment.WebBaseActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name=".bin.detail.DetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
             android:name=".ConsoleActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
@@ -52,7 +64,7 @@
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name=".bin.photo.PhotoActivity"
+            android:name=".bin.photo.PhotoViewPagerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"

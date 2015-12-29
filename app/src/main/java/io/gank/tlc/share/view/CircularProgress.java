@@ -18,7 +18,6 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
 import io.gank.tlc.R;
-import io.gank.tlc.util.L;
 
 public class CircularProgress extends View {
 
@@ -144,7 +143,7 @@ public class CircularProgress extends View {
             startAngle = startAngle + sweepAngle;
             sweepAngle = 360 - sweepAngle - MIN_SWEEP_ANGLE;
         }
-        L.e("startAngle " + startAngle + " ,sweepAngle " + sweepAngle);
+//        L.e("startAngle " + startAngle + " ,sweepAngle " + sweepAngle);
         canvas.drawArc(fBounds, startAngle, sweepAngle, false, mPaint);
     }
 

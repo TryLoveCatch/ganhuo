@@ -9,12 +9,28 @@
 
     <include layout="@layout/include_toolbar" />
 
-    <FrameLayout
-        android:id="@+id/content_frame"
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        />
+        >
+
+        <FrameLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/navigation_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:headerLayout="@layout/navigation_header"
+            app:menu="@menu/menu_left"
+            />
+    </android.support.v4.widget.DrawerLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

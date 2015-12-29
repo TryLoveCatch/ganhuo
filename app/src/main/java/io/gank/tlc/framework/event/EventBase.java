@@ -1,4 +1,4 @@
-package com.ipengtai.wayhand.framework.event;
+package io.gank.tlc.framework.event;
 
 /**
  * Event基类，继承此类防止代码混淆产生的反射异常

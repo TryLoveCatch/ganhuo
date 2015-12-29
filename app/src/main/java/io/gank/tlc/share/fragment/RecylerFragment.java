@@ -1,9 +1,10 @@
 package io.gank.tlc.share.fragment;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +24,7 @@ import io.gank.tlc.bin.net.Apis;
 import io.gank.tlc.framework.BaseFragment;
 import io.gank.tlc.framework.IToolbarAndFab;
 import io.gank.tlc.framework.data.InfoBase;
+import io.gank.tlc.framework.event.EventBus;
 import io.gank.tlc.framework.view.BaseAdapter;
 import io.gank.tlc.util.UtilManager;
 
@@ -34,6 +36,7 @@ public abstract class RecylerFragment extends BaseFragment implements SwipeRefre
     @Bind(R.id.recyler_rcl)
     RecyclerView mRcl;
     protected BaseAdapter mAdp;
+    protected RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.OnScrollListener mScrollListener;
 
     @Bind(R.id.recyler_lin_ad)
@@ -60,6 +63,11 @@ public abstract class RecylerFragment extends BaseFragment implements SwipeRefre
     @Override
     public void onResume() {
         super.onResume();
+
+        try {
+            EventBus.register(this);
+        }catch (Exception e){}
+
         if(!mIsResumed) {
             mIsResumed = true;
             //加载db缓存
@@ -88,6 +96,9 @@ public abstract class RecylerFragment extends BaseFragment implements SwipeRefre
     @Override
     public void onPause() {
         super.onPause();
+        try {
+            EventBus.unregister(this);
+        }catch (Exception e){}
     }
 
     @Override
@@ -106,12 +117,15 @@ public abstract class RecylerFragment extends BaseFragment implements SwipeRefre
     public void initViewProperty() {
         mSwp.setOnRefreshListener(this);
         mSwp.setColorSchemeResources(R.color.refresh_progress_1, R.color.refresh_progress_2, R.color.refresh_progress_3);
-        StaggeredGridLayoutManager tLayoutManager = new StaggeredGridLayoutManager(2, OrientationHelper.VERTICAL);
-        tLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
-        mRcl.setLayoutManager(tLayoutManager);
+
+        mLayoutManager = getLayoutManager();
+        mRcl.setLayoutManager(mLayoutManager);
         mAdp = new BaseAdapter(getActivity());
         mAdp.setData(mArrData);
         setHolderView();
+        MyItemDecoration tItemDec = new MyItemDecoration();
+        tItemDec.setSpace(getItemSpace());
+        mRcl.addItemDecoration(tItemDec);
         mRcl.setAdapter(mAdp);
 //        mRcl.setItemAnimator(new DefaultItemAnimator());
         mScrollListener = new RecyclerView.OnScrollListener() {
@@ -119,9 +133,16 @@ public abstract class RecylerFragment extends BaseFragment implements SwipeRefre
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                int[] tArr = ((StaggeredGridLayoutManager)recyclerView.getLayoutManager())
-                        .findLastCompletelyVisibleItemPositions(null);
-                int tLastVisibleItem = findMax(tArr);
+                int tLastVisibleItem = 0;
+
+                if(mLayoutManager instanceof  StaggeredGridLayoutManager){
+                    int[] tArr = ((StaggeredGridLayoutManager)mLayoutManager)
+                            .findLastCompletelyVisibleItemPositions(null);
+                    tLastVisibleItem = findMax(tArr);
+                }else if(mLayoutManager instanceof LinearLayoutManager){
+                    tLastVisibleItem = ((LinearLayoutManager)mLayoutManager).findLastCompletelyVisibleItemPosition();
+                }
+
                 int tItemCount = mAdp.getItemCount();
 //                L.e("tLastVisibleItem," + tLastVisibleItem + " tItemCount," + tItemCount + " mPage," + mPage + " mIsAll," + mIsAll);
                 if(tLastVisibleItem >= tItemCount - 1){
@@ -141,9 +162,16 @@ public abstract class RecylerFragment extends BaseFragment implements SwipeRefre
                 //滚动
                 //解决smoothScrollToPosition 不能滚到头的问题
                 if(mIsSmooth){
-                    int[] tArrSmooth = ((StaggeredGridLayoutManager)recyclerView.getLayoutManager())
-                            .findFirstCompletelyVisibleItemPositions(null);
-                    if(findMin(tArrSmooth) == 0){
+                    int tFirstVisibleItem = 0;
+                    if(mLayoutManager instanceof  StaggeredGridLayoutManager){
+                        int[] tArr = ((StaggeredGridLayoutManager)mLayoutManager)
+                                .findFirstCompletelyVisibleItemPositions(null);
+                        tFirstVisibleItem = findMin(tArr);
+                    }else if(mLayoutManager instanceof LinearLayoutManager){
+                        tFirstVisibleItem = ((LinearLayoutManager)mLayoutManager).findFirstCompletelyVisibleItemPosition();
+                    }
+
+                    if(tFirstVisibleItem == 0){
                         mIsSmooth = false;
                         mAdp.notifyDataSetChanged();
                     }else{
@@ -225,10 +253,11 @@ public abstract class RecylerFragment extends BaseFragment implements SwipeRefre
 
     protected abstract List<? extends InfoBase> loadDB();
     protected abstract void loadNet();
-    // mAdp.setHolderViews(HomeHView.class);
     protected abstract void setHolderView();
+    protected abstract int getItemSpace();
+    protected abstract RecyclerView.LayoutManager getLayoutManager();
 
-    protected void loadSuc(ArrayList<? extends InfoBase> pArrInfos){
+    protected void loadSuc(List<? extends InfoBase> pArrInfos){
         if (mArrData.size() == 0 && pArrInfos.size() == 0) {
             showEmptyView(mSwp, TYPE_NO_DATA);
             return;
@@ -240,6 +269,7 @@ public abstract class RecylerFragment extends BaseFragment implements SwipeRefre
         if (mArrData.size() > 0) {
             showToast(R.string.msg_top_fail);
         } else {
+            setRefreshing(false, 10);
             showEmptyView(mSwp, TYPE_ERROR);
         }
     }
@@ -260,7 +290,7 @@ public abstract class RecylerFragment extends BaseFragment implements SwipeRefre
         loadNet();
     }
 
-    private void fillView(ArrayList<? extends InfoBase> pArrInfos){
+    private void fillView(List<? extends InfoBase> pArrInfos){
         if(mEmptyView.getVisibility()==View.VISIBLE) {
             hideEmptyView(mSwp);
         }
@@ -323,5 +353,29 @@ public abstract class RecylerFragment extends BaseFragment implements SwipeRefre
                 mSwp.setRefreshing(pRefreshing);
             }
         }, pDelayMillis);
+    }
+
+
+    public class MyItemDecoration extends RecyclerView.ItemDecoration{
+
+        private int space;
+        public void setSpace(int space){
+            this.space = space;
+        }
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            if(space > 0 ){
+                if (parent.getLayoutManager() instanceof LinearLayoutManager) {
+                    if(parent.getChildLayoutPosition(view) != 0) {
+                        outRect.top = space;
+                    }
+                } else {
+                    outRect.left = space;
+                    if(parent.getChildLayoutPosition(view) != 0) {
+                        outRect.top = space;
+                    }
+                }
+            }
+        }
     }
 }

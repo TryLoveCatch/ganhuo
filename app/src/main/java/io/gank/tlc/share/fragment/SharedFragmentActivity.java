@@ -1,9 +1,14 @@
 package io.gank.tlc.share.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
+import android.view.View;
 
 import io.gank.tlc.R;
 import io.gank.tlc.framework.BaseActivity;
@@ -54,6 +59,25 @@ public class SharedFragmentActivity extends BaseActivity {
         fragment.getActivity().startActivityForResult(intent, requestCode);
     }
 
+
+    public static void startFragmentActivity(Activity context, Class<? extends BaseFragment> fragmentClass, Bundle extras, View view){
+
+        Intent intent = new Intent(context, SharedFragmentActivity.class);
+        intent.putExtra(INTENT_FRAGMENT_NAME, fragmentClass);
+        if (null != extras)
+            intent.putExtras(extras);
+
+        ActivityOptionsCompat optionsCompat =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(context, view,
+                        context.getString(R.string.transition_share_photo));
+        try {
+            ActivityCompat.startActivity(context, intent, optionsCompat.toBundle());
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            context.startActivity(intent);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,5 +113,9 @@ public class SharedFragmentActivity extends BaseActivity {
         // TODO Auto-generated method stub
         
     }
-    
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 }

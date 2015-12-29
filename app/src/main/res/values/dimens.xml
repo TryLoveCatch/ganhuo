@@ -27,7 +27,14 @@
     <!--size -->
     <dimen name="dp_1">1dp</dimen>
     <dimen name="dp_2">2dp</dimen>
+    <dimen name="dp_3">3dp</dimen>
+    <dimen name="dp_5">5dp</dimen>
+    <dimen name="dp_8">8dp</dimen>
+    <dimen name="dp_12">12dp</dimen>
     <dimen name="dp_16">16dp</dimen>
     <dimen name="dp_32">32dp</dimen>
+    <dimen name="dp_64">64dp</dimen>
+    <dimen name="dp_80">80dp</dimen>
+    <dimen name="dp_120">120dp</dimen>
 
 </resources>

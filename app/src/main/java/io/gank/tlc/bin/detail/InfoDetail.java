@@ -25,5 +25,7 @@ public class InfoDetail extends InfoAppBase<InfoDetail.Data>{
         public ArrayList<InfoGank> picList;
         @SerializedName("休息视频")
         public ArrayList<InfoGank> videoList;
+        @SerializedName("App")
+        public ArrayList<InfoGank> appList;
     }
 }

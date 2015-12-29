@@ -1,0 +1,37 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/item_home"
+            android:icon="@mipmap/ic_launcher"
+            android:checked="true"
+            android:title="主页" />
+        <item
+            android:id="@+id/item_android"
+            android:icon="@mipmap/ic_launcher"
+            android:title="Android" />
+        <item
+            android:id="@+id/item_ios"
+            android:icon="@mipmap/ic_launcher"
+            android:title="iOS" />
+        <item
+            android:id="@+id/item_expand"
+            android:icon="@mipmap/ic_launcher"
+            android:title="拓展资源" />
+        <item
+            android:id="@+id/item_recommend"
+            android:icon="@mipmap/ic_launcher"
+            android:title="瞎推荐" />
+        <item
+            android:id="@+id/item_video"
+            android:icon="@mipmap/ic_launcher"
+            android:title="休息视频" />
+        <item
+            android:id="@+id/item_meizi"
+            android:icon="@mipmap/ic_launcher"
+            android:title="妹子" />
+        <item
+            android:id="@+id/item_app"
+            android:icon="@mipmap/ic_launcher"
+            android:title="App" />
+    </group>
+</menu>

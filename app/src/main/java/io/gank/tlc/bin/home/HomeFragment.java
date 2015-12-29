@@ -1,24 +1,24 @@
 package io.gank.tlc.bin.home;
 
-import com.litesuits.orm.db.assit.QueryBuilder;
-import com.litesuits.orm.db.model.ConflictAlgorithm;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.gank.tlc.bin.home.info.InfoMeizi;
+import io.gank.tlc.R;
+import io.gank.tlc.bin.detail.DetailActivity;
 import io.gank.tlc.bin.home.view.HomeHView;
-import io.gank.tlc.bin.net.ApiManager;
-import io.gank.tlc.bin.net.Apis;
-import io.gank.tlc.dao.DaoManager;
-import io.gank.tlc.dao.InfoDaoMeizi;
+import io.gank.tlc.dao.InfoDaoHome;
 import io.gank.tlc.framework.data.InfoBase;
+import io.gank.tlc.share.event.EventHome;
+import io.gank.tlc.share.event.EventHomeClicked;
 import io.gank.tlc.share.fragment.RecylerFragment;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.gank.tlc.util.Constant;
 
 public class HomeFragment extends RecylerFragment{
     
@@ -28,69 +28,62 @@ public class HomeFragment extends RecylerFragment{
     //===============事件接口==============
     @Override
     protected List<? extends InfoBase> loadDB(){
-        QueryBuilder tQuery = new QueryBuilder(InfoDaoMeizi.class);
-        tQuery.appendOrderDescBy("updatedAt");
-        tQuery.limit(0, Apis.PAGESIZE);
-        return DaoManager.getInstance().mOrm.query(tQuery);
-
-
+        return HomeManager.getInstatnce().loadDB();
     }
 
     @Override
     protected void loadNet() {
-        Subscription tSub = ApiManager.getInstance().mApis.getMeizi(mPage, Apis.PAGESIZE)
-                .subscribeOn(Schedulers.io())
-                .map(new Func1<InfoMeizi, ArrayList<InfoDaoMeizi>>() {
-                    @Override
-                    public ArrayList<InfoDaoMeizi> call(InfoMeizi infoMeizi) {
-                        return infoMeizi.results;
-                    }
-                })
-                .doOnNext(new Action1<ArrayList<InfoDaoMeizi>>() {
-                    @Override
-                    public void call(ArrayList<InfoDaoMeizi> infoDaoMeizis) {
-                        for (InfoDaoMeizi tInfo : infoDaoMeizis) {
-                            if (DaoManager.getInstance().mOrm.queryById(tInfo.objectId, InfoDaoMeizi.class) == null) {
-                                DaoManager.getInstance().mOrm.insert(tInfo, ConflictAlgorithm.Replace);
-                            }
-                        }
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<ArrayList<InfoDaoMeizi>>() {
-                    @Override
-                    public void call(ArrayList<InfoDaoMeizi> infoGanks) {
-                        loadSuc(infoGanks);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        loadFail();
-                    }
-                });
-        addSubscription(tSub);
+        addSubscription(HomeManager.getInstatnce().loadHomeData(mPage));
     }
 
     @Override
     protected void setHolderView() {
         mAdp.setHolderViews(HomeHView.class);
     }
+
+
+    @Override
+    protected RecyclerView.LayoutManager getLayoutManager() {
+        LinearLayoutManager tLayoutManager = new LinearLayoutManager(getActivity());
+        return tLayoutManager;
+    }
+
+    @Override
+    protected int getItemSpace() {
+        return getResources().getDimensionPixelSize(R.dimen.dp_12);
+    }
+
+    public void onEvent(EventHome pData){
+        if(pData.data!=null){
+            loadSuc(pData.data);
+        }else{
+            loadFail();
+        }
+    }
+
+    public void onEvent(EventHomeClicked pData){
+        startPictureActivity(pData.position, pData.view);
+    }
     //===============对外方法==============
     //===============私有方法==============
-//    private void startPictureActivity(InfoGank pInfo, View pView) {
-//        Intent tIntent = new Intent(getActivity(), PhotoActivity.class);
-//        tIntent.putExtra(Constant.EXTRA_URL, pInfo.url);
-//        tIntent.putExtra(Constant.EXTRA_NAME, pInfo.desc);
-//
-//        ActivityOptionsCompat optionsCompat =
-//                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pView,
-//                        getString(R.string.transition_share_photo));
-//        try {
-//            ActivityCompat.startActivity(getActivity(), tIntent, optionsCompat.toBundle());
-//        } catch (IllegalArgumentException e) {
-//            e.printStackTrace();
-//            startActivity(tIntent);
-//        }
-//    }
+    private void startPictureActivity(int pPosition, View pView) {
+        InfoDaoHome tInfo = (InfoDaoHome)mArrData.get(pPosition);
+
+        Bundle tData = new Bundle();
+        tData.putString(Constant.EXTRA_URL, tInfo.picUrl);
+        tData.putString(Constant.EXTRA_NAME, tInfo.desc);
+        tData.putSerializable(Constant.EXTRA_INFO, tInfo.createTime);
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
+        intent.putExtras(tData);
+
+        ActivityOptionsCompat optionsCompat =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pView,
+                        getActivity().getString(R.string.transition_share_photo));
+        try {
+            ActivityCompat.startActivity(getActivity(), intent, optionsCompat.toBundle());
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            getActivity().startActivity(intent);
+        }
+    }
 }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/video_item_rlt"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/dp_120"
+    android:padding="@dimen/dp_8"
+    android:background="@drawable/bg_card"
+    >
+
+    <TextView
+        android:id="@+id/video_item_txt_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:textSize="@dimen/text_size_15"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        />
+
+    <ImageView
+        android:id="@+id/video_item_img"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_64"
+        android:layout_below="@id/video_item_txt_desc"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        />
+
+    <LinearLayout
+        android:id="@+id/video_item_lin_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/video_item_img"
+        android:paddingBottom="@dimen/dp_8"
+        >
+        <TextView
+            android:id="@+id/video_item_txt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_13"
+            android:textColor="@color/black"
+            android:singleLine="true"
+            />
+        <TextView
+            android:id="@+id/video_item_txt_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:textSize="@dimen/text_size_12"
+            android:textColor="@color/gray"
+            />
+    </LinearLayout>
+
+
+
+</RelativeLayout>

@@ -45,7 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IUI, OnN
 	 */
     private ArrayList<Subscription> mSubscriptions = new ArrayList<>();
 	private boolean forbidStartActivityAnimation = false;
-	private boolean forbidFinishActivityGesture = true;//默认不要左划finish
+	private boolean forbidFinishActivityGesture = false;//默认不要左划finish
 	// ================生命周期相关=====================
     /**
      * 做了4件事:<br>

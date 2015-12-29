@@ -3,6 +3,7 @@ package io.gank.tlc;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.WindowManager;
 
 import io.gank.tlc.framework.BaseActivity;
 
@@ -15,6 +16,8 @@ public class FirstActivity extends BaseActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	setForbidStartActivityAnimation(true);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState, R.layout.first);
     }
     
