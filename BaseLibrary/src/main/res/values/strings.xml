@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BaseLibrary</string>
+    <string name="progress_loading">加载中</string>
+    <string name="no_more_data">没有更多数据了</string>
+</resources>

@@ -1,1 +1,1 @@
-include ':app'
+include ':BaseLibrary', ':gank'

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Gank</string>
+
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="title_exit">提示</string>
+    <string name="msg_exit">您确定要退出应用么？</string>
+</resources>

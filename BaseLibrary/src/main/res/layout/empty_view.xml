@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/emptyView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <io.github.trylovecatch.baselibrary.view.CircularProgress
+        android:id="@+id/custom_empty_view_loading_pb"
+        android:layout_width="@dimen/dp_32"
+        android:layout_height="@dimen/dp_32"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:borderWidth="@dimen/dp_2"
+        />
+
+    <LinearLayout
+        android:id="@+id/custom_empty_view_emptyview"
+        style="@style/CommonEmptyViewStyle"
+        android:visibility="gone" >
+        <TextView
+            android:id="@+id/custom_empty_view_top_tv"
+            style="@style/CommonEmptyViewTopTextViewStyle" />
+
+        <TextView
+            android:id="@+id/custom_empty_view_bottom_tv"
+            style="@style/CommonEmptyViewTopTextViewStyle"
+            android:text="@string/msg_bottom"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- string -->
+	<!-- color -->
+	<color name="progress_red">#FFC93437</color>
+	<color name="progress_blue">#FF375BF1</color>
+	<color name="progress_yellow">#FFF7D23E</color>
+	<color name="progress_green">#FF34A350</color>
+	<!-- style -->
+	<declare-styleable name="CircularProgress">
+		<attr name="pBorderWidth" format="dimension" />
+	</declare-styleable>
+</resources>

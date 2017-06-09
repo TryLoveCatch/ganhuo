@@ -1,0 +1,50 @@
+def supportVersion = "25.3.1"
+def rxjavaVersion = "2.1.0"
+def rxandroidVersion = "2.0.1"
+def retrofitVersion = "2.3.0"
+def butterKnifeVersion = "8.6.0"
+def daggerVersion = "2.8"
+def glideVersion = "4.0.0-RC0"
+
+project.ext {
+    android = [
+            compileSdkVersion: 25,
+            buildToolsVersion: "25.0.3",
+            applicationId    : "io.github.trylovecatch.gank",
+            minSdkVersion    : 15,
+            targetSdkVersion : 25,
+            versionCode      : 1,
+            versionName      : "1.0"
+    ]
+
+    dependencies = [
+            //android-support
+            "support-v4"                  : "com.android.support:support-v4:${supportVersion}",
+            "appcompat-v7"                : "com.android.support:appcompat-v7:${supportVersion}",
+            "design"                      : "com.android.support:design:${supportVersion}",
+            "recyclerview"                : "com.android.support:recyclerview-v7:${supportVersion}",
+            "cardview"                    : "com.android.support:cardview-v7:${supportVersion}",
+
+            //rx
+            "rxjava"                      : "io.reactivex.rxjava2:rxjava:${rxjavaVersion}",
+            "rxandroid"                   : "io.reactivex.rxjava2:rxandroid:${rxandroidVersion}",
+
+            //retrofit
+            "retrofit"                    : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
+            "retrofit-adapter-rxjava"     : "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}",
+            "retrofit-gson"               : "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
+            "okhttp3-log"                 : "com.squareup.okhttp3:logging-interceptor:3.7.0",
+
+            //glide
+            "glide"                       : "com.github.bumptech.glide:glide:${glideVersion}",
+            "glide-complier"              : "com.github.bumptech.glide:compiler:${glideVersion}",
+
+            //butterknife
+            "butterknife"                 : "com.jakewharton:butterknife:${butterKnifeVersion}",
+            "butterknife-compiler"        : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
+            "butterknife-gradle-plugin"   : "com.jakewharton:butterknife-gradle-plugin:${butterKnifeVersion}",
+
+            //other
+            "eventbus"                    : "org.greenrobot:eventbus:3.0.0",
+    ]
+}
