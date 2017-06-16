@@ -36,6 +36,12 @@ public class MeiziFragment extends RecyclerFragment<IRecyclerBaseView, MeiziPres
         return tLayoutManager;
     }
 
+    @Override
+    public void initViewProperty() {
+        super.initViewProperty();
+        setTitle("福利");
+    }
+
     //===============对外方法==============
     //===============私有方法==============
 }

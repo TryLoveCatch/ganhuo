@@ -37,6 +37,12 @@ public class VideoFragment extends RecyclerFragment<IRecyclerBaseView, VideoPres
         return tLayoutManager;
     }
 
+    @Override
+    public void initViewProperty() {
+        super.initViewProperty();
+        setTitle("视频");
+    }
+
     //===============对外方法==============
     //===============私有方法==============
 }

@@ -9,7 +9,6 @@ import io.github.trylovecatch.baselibrary.log.Logger;
 /** 窗口管理类 */
 public class UtilActivity {
 	//==============常量==================
-	private static final String TAG = UtilActivity.class.getSimpleName();
 	//==============界面相关==================
 	//==============逻辑相关==================
 	private static volatile UtilActivity mInstance;
@@ -57,14 +56,14 @@ public class UtilActivity {
 
 	/** 清空栈 */
 	public void clearActivtyStack() {
-		Logger.i(TAG,"关闭窗口：" + activityStack.size());
+//		Logger.i("关闭窗口：" + activityStack.size());
 		for(int i=activityStack.size()-1;i>=0;i--){
-			Logger.i(TAG, "准备关闭"+i);
+//			Logger.i( "准备关闭"+i);
 			Activity activity = activityStack.get(i);
 			if(activity!=null){
 				activity.finish();
 			}
-			Logger.i(TAG,"关闭窗口：" + activity.getClass().getName());
+			Logger.i("关闭窗口：" + activity.getClass().getName());
 		}
 		activityStack.clear();
 		

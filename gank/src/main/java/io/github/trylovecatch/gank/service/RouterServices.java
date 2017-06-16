@@ -1,7 +1,5 @@
 package io.github.trylovecatch.gank.service;
 
-import java.util.Map;
-
 import android.content.Context;
 import io.github.trylovecatch.baselibrary.BaseFragment;
 import io.github.trylovecatch.baselibrary.PublicActivity;
@@ -49,11 +47,11 @@ public class RouterServices  {
     public interface MyServices extends BaseRouterServices {
         @IntentUri("tlc://io.github.trylovecatch.baselibrary.PublicActivity")
         void startVideoPlay(
-                @IntentParam(PublicActivity.INTENT_FRAGMENT_NAME) Class< ? extends BaseFragment> pFragmentClass,
+                @IntentParam(PublicActivity.EXTRA_FRAGMENT_NAME) Class< ? extends BaseFragment> pFragmentClass,
                 @IntentParam(VideoPlayFragment.EXTRA_URL) String pUrl);
         @IntentUri("tlc://io.github.trylovecatch.baselibrary.PublicActivity")
         void startText(
-                @IntentParam(PublicActivity.INTENT_FRAGMENT_NAME) Class< ? extends BaseFragment> pFragmentClass,
+                @IntentParam(PublicActivity.EXTRA_FRAGMENT_NAME) Class< ? extends BaseFragment> pFragmentClass,
                 @IntentParam(TextFragment.EXTRA_TYPE) String pType);
     }
 

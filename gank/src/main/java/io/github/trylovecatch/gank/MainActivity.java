@@ -1,17 +1,17 @@
 package io.github.trylovecatch.gank;
 
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.github.trylovecatch.baselibrary.BaseActivity;
-import io.github.trylovecatch.baselibrary.PublicActivity;
-import io.github.trylovecatch.baselibrary.log.Logger;
-import io.github.trylovecatch.baselibrary.router.Router;
+import io.github.trylovecatch.baselibrary.ConsoleActivity;
 import io.github.trylovecatch.gank.meizi.MeiziFragment;
 import io.github.trylovecatch.gank.service.ApiServeces;
 import io.github.trylovecatch.gank.service.RouterServices;
@@ -31,12 +31,19 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        Logger.i(this.toString());
-//        Logger.json("{'name': 'xxxx', 'age': 12, 'classes': [1, 2, 3], 'teacher': {'name': 'yyy', age: '44'}}");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getApplication().onTerminate();
     }
 
     @Override
     public void initViewProperty() {
+        setTitle("主界面");
+        setForbidFinishActivityGesture(true);
+        setForbidStartActivityAnimation(true);
     }
 
     @Override
@@ -105,6 +112,49 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    private float pointA = 0;
+    private float pointB = 0;
+    private final float MOVE_DISTANCE = 50;
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        // TODO Auto-generated method stub
+
+        if (BuildConfig.DEBUG) {
+            int pointerCount = event.getPointerCount();
+            int action = event.getAction();
+            int actionMasked = event.getActionMasked();
+
+            if (pointerCount == 2 && action == MotionEvent.ACTION_POINTER_2_DOWN) {
+                pointA = event.getY(0);
+                pointB = event.getY(1);
+            }
+
+            if (pointerCount == 2 && actionMasked == MotionEvent.ACTION_POINTER_1_UP) {
+                float changeA = pointA - event.getY(0);
+                float changeB = pointB - event.getY(1);
+
+                if (changeA <= -MOVE_DISTANCE && changeB <= -MOVE_DISTANCE) {
+                    startActivity(new Intent(this, ConsoleActivity.class));
+                    RouterServices.getInstance().getService(this).startConsoleActivity();
+                    return true;
+                }
+
+                pointA = 0;
+                pointB = 0;
+            }
+
+            try{
+                return super.dispatchTouchEvent(event);
+            }catch(Exception e){
+                e.printStackTrace();
+                return true;
+            }
+        }
+        return super.dispatchTouchEvent(event);
+    }
+
+
     private void showExitDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.title_exit);
@@ -112,7 +162,13 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                getApplication().onTerminate();
+                /**
+                 * 先结束这个Activity
+                 * 然后再onDestroy里面杀死进程，退出Application
+                 *
+                 * 这样解决闪屏的问题
+                 */
+                finish();
             }
         });
 

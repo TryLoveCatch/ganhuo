@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.view.View;
 
 /**
  * 公用FragmentActivity
@@ -14,8 +15,9 @@ import android.support.v4.app.FragmentManager;
  */
 public class PublicActivity extends BaseActivity {
 
-    public static final String INTENT_FRAGMENT_NAME = "intent_fragment_name";
-    
+    public static final String EXTRA_FRAGMENT_NAME = "fragment_name";
+    public static final String EXTRA_IS_HAS_TOOLBAR = "isHasToolbar";
+
     /**
      * 启动一个fragment
      * 
@@ -27,7 +29,7 @@ public class PublicActivity extends BaseActivity {
      */
     public static void startFragmentActivity(Context context, Class<? extends BaseFragment> fragmentClass, Bundle extras) {
         Intent intent = new Intent(context, PublicActivity.class);
-        intent.putExtra(INTENT_FRAGMENT_NAME, fragmentClass);
+        intent.putExtra(EXTRA_FRAGMENT_NAME, fragmentClass);
         if (null != extras)
             intent.putExtras(extras);
         context.startActivity(intent);
@@ -44,7 +46,7 @@ public class PublicActivity extends BaseActivity {
      */
     public static void startFragmentActivityForResult(BaseFragment fragment, Class<? extends BaseFragment> fragmentClass, int requestCode, Bundle extras) {
         Intent intent = new Intent(fragment.getActivity(), PublicActivity.class);
-        intent.putExtra(INTENT_FRAGMENT_NAME, fragmentClass);
+        intent.putExtra(EXTRA_FRAGMENT_NAME, fragmentClass);
         if (null != extras)
             intent.putExtras(extras);
         fragment.getActivity().startActivityForResult(intent, requestCode);
@@ -54,7 +56,7 @@ public class PublicActivity extends BaseActivity {
 //    public static void startFragmentActivity(Activity context, Class<? extends BaseFragment> fragmentClass, Bundle extras, View view){
 //
 //        Intent intent = new Intent(context, SharedFragmentActivity.class);
-//        intent.putExtra(INTENT_FRAGMENT_NAME, fragmentClass);
+//        intent.putExtra(EXTRA_FRAGMENT_NAME, fragmentClass);
 //        if (null != extras)
 //            intent.putExtras(extras);
 //
@@ -72,11 +74,11 @@ public class PublicActivity extends BaseActivity {
     @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_frame);
+        boolean isHasToolbar = getIntent().getBooleanExtra(EXTRA_IS_HAS_TOOLBAR, true);
+        super.onCreate(savedInstanceState, isHasToolbar ? R.layout.content_frame_toolbar : R.layout.content_frame);
 
-        Class<? extends BaseFragment> fragmentClass = (Class<? extends BaseFragment>)getIntent().getSerializableExtra(INTENT_FRAGMENT_NAME);
+        Class<? extends BaseFragment> fragmentClass = (Class<? extends BaseFragment>)getIntent().getSerializableExtra(
+                EXTRA_FRAGMENT_NAME);
         if (fragmentClass != null) {
             setContentFragment(fragmentClass, getIntent().getExtras());
         }
@@ -96,7 +98,15 @@ public class PublicActivity extends BaseActivity {
     @Override
     public void initViewProperty() {
         // TODO Auto-generated method stub
-        
+        if(mToolbar!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            mToolbar.setNavigationOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
     }
 
     @Override

@@ -14,7 +14,15 @@
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden" >
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW" />
+                <data
+                        android:host="io.github.trylovecatch.baselibrary.ConsoleActivity"
+                        android:scheme="tlc" />
+            </intent-filter>
+        </activity>
         <activity
                 android:name=".web.WebBaseActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"

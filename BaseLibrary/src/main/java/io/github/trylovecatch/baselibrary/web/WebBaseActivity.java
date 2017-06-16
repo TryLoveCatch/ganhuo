@@ -6,31 +6,25 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import butterknife.BindView;
 import io.github.trylovecatch.baselibrary.BaseActivity;
 import io.github.trylovecatch.baselibrary.R;
-import io.github.trylovecatch.baselibrary.R2;
 import io.github.trylovecatch.baselibrary.utils.UtilsToast;
 
 public class WebBaseActivity extends BaseActivity {
     public static final String EXTRA_URL = "url";
 
     //===============界面变量==============
-    @BindView(R2.id.toolbar)
-    Toolbar mToolbar;
-
     //===============逻辑变量==============
     private String mUrl;
     //===============生命周期==============
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.web_base);
+        super.onCreate(savedInstanceState, R.layout.content_frame_toolbar);
     }
 
 
@@ -75,7 +69,6 @@ public class WebBaseActivity extends BaseActivity {
 
     @Override
     public void initViewProperty() {
-        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setOnClickListener(new View.OnClickListener() {
             @Override

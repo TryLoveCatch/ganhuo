@@ -54,12 +54,16 @@ public abstract class BaseApplication extends Application{
 		Logger.i("app finishing ...");
 		//清空数据
 		//取消网络监听
-		mNetCheck.unRegister();
+		try {
+			mNetCheck.unRegister();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 		//清空栈
 		UtilActivity.getInstance().clearActivtyStack();
 		//退出程序
-		android.os.Process.killProcess(android.os.Process.myPid());  
-		System.exit(0); 
+		android.os.Process.killProcess(android.os.Process.myPid());
+		System.exit(0);
 	}
 	/**
 	 * 一些初始化

@@ -26,9 +26,11 @@ import io.github.trylovecatch.baselibrary.view.EmptyView;
  */
 public abstract class BaseFragment extends Fragment implements IUI {
 
+//    private ArrayList<Subscription> mSubscriptions = new ArrayList<>();
+
     private View mRoot;
-    @Nullable
-    @BindView(R2.id.emptyView)
+//    @Nullable
+//    @BindView(R2.id.emptyView)
     protected EmptyView mEmptyView;
 
     private boolean mIsResumed;
@@ -61,7 +63,7 @@ public abstract class BaseFragment extends Fragment implements IUI {
         mRoot.setBackgroundColor(Color.WHITE);
 
         ButterKnife.bind(this, mRoot);
-
+        mEmptyView = (EmptyView)mRoot.findViewById(R.id.emptyView);
         initData();
         initViewProperty();
 

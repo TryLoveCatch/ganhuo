@@ -30,6 +30,7 @@ import android.os.Environment;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
+import io.github.trylovecatch.baselibrary.log.Logger;
 import io.github.trylovecatch.baselibrary.utils.UtilsToast;
 import io.github.trylovecatch.baselibrary.utils.UtilActivity;
 import io.github.trylovecatch.baselibrary.utils.UtilFile;
@@ -159,26 +160,20 @@ public class CrashHandler implements UncaughtExceptionHandler {
 					public void onClick(DialogInterface dialog, int which) {
                         UtilActivity.getInstance().clearActivtyStack();
 						
-//						Intent i = mApp.getPackageManager()  
-//						        .getLaunchIntentForPackage(mApp.getPackageName());  
-//						i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
-//						mApp.startActivity(i);
-						
-//						Intent tIntent = new Intent(mApp.mUtilManager.mUtilActivity.getTopActivityFromStack(), MainActivity.class);
-//						tIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  
-//						mApp.mUtilManager.mUtilActivity.getTopActivityFromStack().startActivity(tIntent);
-						
-						// 以下用来捕获程序崩溃异常  
-				        Intent intent = new Intent();  
-				        // 参数1：包名，参数2：程序入口的activity
-                        intent.setPackage(mContext.getPackageName());
-                        intent.setAction(Intent.ACTION_MAIN);
-                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+						// 以下用来捕获程序崩溃异常
+//				        Intent intent = new Intent();
+//				        // 参数1：包名，参数2：程序入口的activity
+//                        intent.setPackage(mContext.getPackageName());
+//                        Logger.i(mContext.getPackageName());
+//                        intent.setAction(Intent.ACTION_MAIN);
+//                        intent.addCategory(Intent.CATEGORY_DEFAULT);
+                        Intent intent = mContext.getPackageManager()
+                                .getLaunchIntentForPackage(mContext.getPackageName());
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 				        PendingIntent restartIntent = PendingIntent.getActivity(mContext, 0,  
 				                intent, PendingIntent.FLAG_ONE_SHOT);
 				        AlarmManager mgr = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);  
-			            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 2000,  
+			            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 1200,
 			                    restartIntent); // 2秒钟后重启应用
 			            //退出程序  
                         android.os.Process.killProcess(android.os.Process.myPid());  

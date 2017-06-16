@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.trylovecatch.baselibrary.application.BaseApplication;
 import io.github.trylovecatch.baselibrary.application.OnNetChangeListener;
@@ -26,6 +29,12 @@ import io.github.trylovecatch.baselibrary.utils.UtilActivity;
 public abstract class BaseActivity extends AppCompatActivity implements IUI, OnNetChangeListener {
 	// ================一些常量=====================
 	// ================界面相关=====================
+
+    //因为是R2在library里面没问题，但是aplication的module里面应该用R
+    //所以会为null
+//    @Nullable
+//    @BindView(R2.id.toolbar)
+    protected Toolbar mToolbar;
 	// ================逻辑相关=====================
 	private boolean forbidStartActivityAnimation = false;
 	private boolean forbidFinishActivityGesture = false;//默认不要左划finish
@@ -51,6 +60,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IUI, OnN
         ((BaseApplication)getApplication()).getNetCheckReceiver().getFilter().addListener(this);
         
         ButterKnife.bind(this);
+        initToolbar();
         initData();
         initViewProperty();
     }
@@ -143,7 +153,24 @@ public abstract class BaseActivity extends AppCompatActivity implements IUI, OnN
     @Override
 	public void onNetChanged(boolean isAvailable) {
 	}
-    
+
+    @Override
+    public void setTitle(CharSequence title) {
+        if (null != getSupportActionBar()) {
+            getSupportActionBar().setTitle(title);
+        } else {
+            super.setTitle(title);
+        }
+    }
+
+    @Override
+    public void setTitle(int titleId) {
+        if (null != getSupportActionBar()) {
+            getSupportActionBar().setTitle(titleId);
+        } else {
+            super.setTitle(titleId);
+        }
+    }
     // ================对外方法=====================
     /**
      * 设置禁止启动Activity动画
@@ -209,5 +236,13 @@ public abstract class BaseActivity extends AppCompatActivity implements IUI, OnN
 
     public void showToast(int resId) {
         UtilsToast.showShort(this, resId);
+    }
+
+
+    private void initToolbar(){
+        mToolbar = (Toolbar)findViewById(R.id.toolbar);
+        if(mToolbar!=null) {
+            setSupportActionBar(mToolbar);
+        }
     }
 }

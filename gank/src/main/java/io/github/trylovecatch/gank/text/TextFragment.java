@@ -57,6 +57,11 @@ public class TextFragment extends RecyclerFragment<IRecyclerBaseView, TextPresen
         return tLayoutManager;
     }
 
+    @Override
+    public void initViewProperty() {
+        super.initViewProperty();
+        setTitle(mTxtType);
+    }
     //===============对外方法==============
     //===============私有方法==============
 }
